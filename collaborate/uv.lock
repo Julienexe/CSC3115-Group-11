@@ -2,12 +2,6 @@ version = 1
 revision = 3
 requires-python = ">=3.13"
 
-[manifest]
-members = [
-    "collaborate",
-    "core",
-]
-
 [[package]]
 name = "asgiref"
 version = "3.9.1"
@@ -21,17 +15,6 @@ wheels = [
 name = "collaborate"
 version = "0.1.0"
 source = { virtual = "." }
-dependencies = [
-    { name = "django" },
-]
-
-[package.metadata]
-requires-dist = [{ name = "django", specifier = ">=5.2.5" }]
-
-[[package]]
-name = "core"
-version = "0.1.0"
-source = { virtual = "core" }
 dependencies = [
     { name = "django" },
 ]
