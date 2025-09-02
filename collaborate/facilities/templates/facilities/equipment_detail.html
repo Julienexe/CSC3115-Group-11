@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}{{ equipment.name }} - Equipment Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'facilities:facility-list' %}">Facilities</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'facilities:facility-detail' equipment.facility.pk %}">{{ equipment.facility.name }}</a></li>
+            <li class="breadcrumb-item active">{{ equipment.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="card-title h2">{{ equipment.name }}</h1>
+                        <span class="badge bg-secondary">{{ equipment.inventory_code }}</span>
+                    </div>
+
+                    <h5>Description</h5>
+                    <p>{{ equipment.description }}</p>
+
+                    <h5>Capabilities</h5>
+                    <p>{{ equipment.capabilities }}</p>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Usage Domain</h6>
+                                    <p class="card-text">{{ equipment.usage_domain }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Support Phase</h6>
+                                    <p class="card-text">{{ equipment.support_phase }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Facility Info -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Facility Information</h5>
+                    <dl>
+                        <dt>Facility</dt>
+                        <dd><a href="{% url 'facilities:facility-detail' equipment.facility.pk %}">{{ equipment.facility.name }}</a></dd>
+
+                        <dt>Location</dt>
+                        <dd>{{ equipment.facility.location }}</dd>
+
+                        <dt>Facility Type</dt>
+                        <dd>{{ equipment.facility.get_facility_type_display }}</dd>
+
+                        {% if equipment.facility.partner_organization %}
+                        <dt>Partner Organization</dt>
+                        <dd>{{ equipment.facility.partner_organization }}</dd>
+                        {% endif %}
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Equipment Info -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Equipment Details</h5>
+                    <dl>
+                        <dt>Inventory Code</dt>
+                        <dd>{{ equipment.inventory_code }}</dd>
+
+                        <dt>Added</dt>
+                        <dd>{{ equipment.created_at|date:"F j, Y" }}</dd>
+
+                        <dt>Last Updated</dt>
+                        <dd>{{ equipment.updated_at|date:"F j, Y" }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}{{ object.title|default:object.name }} - {{ model_name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            {% block breadcrumbs %}{% endblock %}
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="card-title h2">{{ object.title|default:object.name }}</h1>
+                        {% block detail_actions %}{% endblock %}
+                    </div>
+
+                    {% block badges %}{% endblock %}
+
+                    {% block main_content %}{% endblock %}
+                </div>
+            </div>
+
+            {% block additional_content %}{% endblock %}
+        </div>
+
+        <div class="col-md-4">
+            {% block sidebar %}
+            <!-- Metadata -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Details</h5>
+                    <dl>
+                        <dt>Added</dt>
+                        <dd>{{ object.created_at|date:"F j, Y" }}</dd>
+
+                        <dt>Last Updated</dt>
+                        <dd>{{ object.updated_at|date:"F j, Y" }}</dd>
+
+                        {% block additional_metadata %}{% endblock %}
+                    </dl>
+                </div>
+            </div>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Projects</h1>
+        <a href="" class="btn btn-primary">Add Project</a>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <form method="get" class="card">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Project Nature</label>
+                            <select name="nature" class="form-select">
+                                <option value="">All Types</option>
+                                <option value="research" {% if request.GET.nature == 'research' %}selected{% endif %}>Research</option>
+                                <option value="prototype" {% if request.GET.nature == 'prototype' %}selected{% endif %}>Prototype</option>
+                                <option value="applied" {% if request.GET.nature == 'applied' %}selected{% endif %}>Applied Work</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Prototype Stage</label>
+                            <select name="stage" class="form-select">
+                                <option value="">All Stages</option>
+                                <option value="concept" {% if request.GET.stage == 'concept' %}selected{% endif %}>Concept</option>
+                                <option value="prototype" {% if request.GET.stage == 'prototype' %}selected{% endif %}>Prototype</option>
+                                <option value="mvp" {% if request.GET.stage == 'mvp' %}selected{% endif %}>MVP</option>
+                                <option value="launch" {% if request.GET.stage == 'launch' %}selected{% endif %}>Market Launch</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Search</label>
+                            <input type="text" name="search" class="form-control" placeholder="Search projects..." value="{{ request.GET.search }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="submit" class="btn btn-primary w-100">Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Projects List -->
+    <div class="row">
+        {% if projects %}
+            {% for project in projects %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <h5 class="card-title">{{ project.title }}</h5>
+                                <span class="badge bg-primary">{{ project.get_nature_of_project_display }}</span>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ project.program.title }}</h6>
+                            <p class="card-text">{{ project.description|truncatewords:30 }}</p>
+                            
+                            <div class="mb-3">
+                                <small class="text-muted">
+                                    <strong>Stage:</strong> {{ project.get_prototype_stage_display }}<br>
+                                    <strong>Facility:</strong> {{ project.facility.name }}<br>
+                                    <strong>Focus:</strong> {{ project.innovation_focus }}
+                                </small>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{% url 'projects:project-detail' project.pk %}" class="btn btn-outline-primary">View Details</a>
+                                <small class="text-muted">Created: {{ project.created_at|date:"M d, Y" }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No projects found. Start by creating a new project!
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.nature %}&nature={{ request.GET.nature }}{% endif %}{% if request.GET.stage %}&stage={{ request.GET.stage }}{% endif %}">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.nature %}&nature={{ request.GET.nature }}{% endif %}{% if request.GET.stage %}&stage={{ request.GET.stage }}{% endif %}">Previous</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.nature %}&nature={{ request.GET.nature }}{% endif %}{% if request.GET.stage %}&stage={{ request.GET.stage }}{% endif %}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.nature %}&nature={{ request.GET.nature }}{% endif %}{% if request.GET.stage %}&stage={{ request.GET.stage }}{% endif %}">Last &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

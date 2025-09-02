@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}{{ service.name }} - Service Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'facilities:facility-list' %}">Facilities</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'facilities:facility-detail' service.facility.pk %}">{{ service.facility.name }}</a></li>
+            <li class="breadcrumb-item active">{{ service.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="card-title h2">{{ service.name }}</h1>
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="badge bg-primary">{{ service.get_category_display }}</span>
+                        <span class="badge bg-secondary">{{ service.get_skill_type_display }}</span>
+                    </div>
+
+                    <h5>Description</h5>
+                    <p>{{ service.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Facility Info -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Facility Information</h5>
+                    <dl>
+                        <dt>Facility</dt>
+                        <dd><a href="{% url 'facilities:facility-detail' service.facility.pk %}">{{ service.facility.name }}</a></dd>
+
+                        <dt>Location</dt>
+                        <dd>{{ service.facility.location }}</dd>
+
+                        <dt>Facility Type</dt>
+                        <dd>{{ service.facility.get_facility_type_display }}</dd>
+
+                        {% if service.facility.partner_organization %}
+                        <dt>Partner Organization</dt>
+                        <dd>{{ service.facility.partner_organization }}</dd>
+                        {% endif %}
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Service Info -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Service Details</h5>
+                    <dl>
+                        <dt>Category</dt>
+                        <dd>{{ service.get_category_display }}</dd>
+
+                        <dt>Skill Type</dt>
+                        <dd>{{ service.get_skill_type_display }}</dd>
+
+                        <dt>Added</dt>
+                        <dd>{{ service.created_at|date:"F j, Y" }}</dd>
+
+                        <dt>Last Updated</dt>
+                        <dd>{{ service.updated_at|date:"F j, Y" }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

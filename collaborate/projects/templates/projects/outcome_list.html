@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Project Outcomes{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Project Outcomes</h1>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <form method="get" class="card">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Outcome Type</label>
+                            <select name="type" class="form-select">
+                                <option value="">All Types</option>
+                                <option value="cad" {% if request.GET.type == 'cad' %}selected{% endif %}>CAD</option>
+                                <option value="pcb" {% if request.GET.type == 'pcb' %}selected{% endif %}>PCB</option>
+                                <option value="prototype" {% if request.GET.type == 'prototype' %}selected{% endif %}>Prototype</option>
+                                <option value="report" {% if request.GET.type == 'report' %}selected{% endif %}>Report</option>
+                                <option value="business_plan" {% if request.GET.type == 'business_plan' %}selected{% endif %}>Business Plan</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Commercialization Status</label>
+                            <select name="status" class="form-select">
+                                <option value="">All Statuses</option>
+                                <option value="demoed" {% if request.GET.status == 'demoed' %}selected{% endif %}>Demoed</option>
+                                <option value="market_linked" {% if request.GET.status == 'market_linked' %}selected{% endif %}>Market Linked</option>
+                                <option value="launched" {% if request.GET.status == 'launched' %}selected{% endif %}>Launched</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Search</label>
+                            <input type="text" name="search" class="form-control" placeholder="Search outcomes..." value="{{ request.GET.search }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="submit" class="btn btn-primary w-100">Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Outcomes List -->
+    <div class="row">
+        {% if outcomes %}
+            {% for outcome in outcomes %}
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title">{{ outcome.title }}</h5>
+                                <span class="badge bg-primary">{{ outcome.get_outcome_type_display }}</span>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                Project: <a href="{% url 'projects:project-detail' outcome.project.pk %}">{{ outcome.project.title }}</a>
+                            </h6>
+                            <p class="card-text">{{ outcome.description|truncatewords:30 }}</p>
+                            
+                            {% if outcome.quality_certification %}
+                            <div class="mb-2">
+                                <small class="text-muted">
+                                    <strong>Certification:</strong> {{ outcome.quality_certification }}
+                                </small>
+                            </div>
+                            {% endif %}
+
+                            {% if outcome.commercialization_status %}
+                            <div class="mb-3">
+                                <span class="badge bg-success">{{ outcome.get_commercialization_status_display }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{% url 'projects:outcome-detail' outcome.pk %}" class="btn btn-outline-primary">View Details</a>
+                                {% if outcome.artifact_link %}
+                                    <a href="{{ outcome.artifact_link }}" class="btn btn-outline-secondary" target="_blank">
+                                        <i class="bi bi-link-45deg"></i> View Artifact
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No outcomes found matching your criteria.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">Previous</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.type %}&type={{ request.GET.type }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">Last &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

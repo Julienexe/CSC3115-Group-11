@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Delete {{ project.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'projects:project-list' %}">Projects</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'projects:project-detail' project.pk %}">{{ project.title }}</a></li>
+            <li class="breadcrumb-item active">Delete</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Delete Project</h2>
+                    
+                    <p class="alert alert-danger">
+                        Are you sure you want to delete the project "{{ project.title }}"? 
+                        This action cannot be undone and will also delete all associated outcomes.
+                    </p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'projects:project-detail' project.pk %}" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                            <button type="submit" class="btn btn-danger">Delete Project</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

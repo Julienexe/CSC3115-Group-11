@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Search and Filter Section -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <form method="get" class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" name="search" class="form-control" placeholder="Search facilities..." value="{{ search_query }}">
+                </div>
+                <div class="col-md-4">
+                    <select name="facility_type" class="form-select">
+                        <option value="">All Types</option>
+                        <option value="lab" {% if facility_type == 'lab' %}selected{% endif %}>Lab</option>
+                        <option value="workshop" {% if facility_type == 'workshop' %}selected{% endif %}>Workshop</option>
+                        <option value="testing" {% if facility_type == 'testing' %}selected{% endif %}>Testing Center</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Facilities List -->
+    <div class="row">
+        {% if facilities %}
+            {% for facility in facilities %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title">{{ facility.name }}</h5>
+                                <span class="badge bg-primary">{{ facility.get_facility_type_display }}</span>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ facility.location }}</h6>
+                            <p class="card-text">{{ facility.description|truncatewords:30 }}</p>
+                            
+                            {% if facility.capabilities %}
+                            <div class="mb-3">
+                                <small class="text-muted">Capabilities:</small><br>
+                                <p class="mb-0"><small>{{ facility.capabilities|truncatewords:10 }}</small></p>
+                            </div>
+                            {% endif %}
+                            
+                            {% if facility.partner_organization %}
+                            <p class="card-text"><small class="text-muted">Partner: {{ facility.partner_organization }}</small></p>
+                            {% endif %}
+                            
+                            <div class="mt-3">
+                                <a href="{% url 'facilities:facility-detail' facility.pk %}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No facilities found.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}{{ participant.name }} - Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'participants:participant-list' %}">Participants</a></li>
+            <li class="breadcrumb-item active">{{ participant.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="card-title">{{ participant.name }}</h1>
+                    <h6 class="card-subtitle mb-3 text-muted">{{ participant.email }}</h6>
+
+                    <div class="mb-4">
+                        <h5>Profile Information</h5>
+                        <dl class="row">
+                            <dt class="col-sm-3">Role</dt>
+                            <dd class="col-sm-9">{{ participant.role }}</dd>
+
+                            <dt class="col-sm-3">Organization</dt>
+                            <dd class="col-sm-9">{{ participant.organization }}</dd>
+
+                            <dt class="col-sm-3">Joined</dt>
+                            <dd class="col-sm-9">{{ participant.created_at|date:"F j, Y" }}</dd>
+                        </dl>
+                    </div>
+
+                    {% if participant.bio %}
+                    <div class="mb-4">
+                        <h5>About</h5>
+                        <p>{{ participant.bio }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if participant.expertise %}
+                    <div class="mb-4">
+                        <h5>Areas of Expertise</h5>
+                        <p>{{ participant.expertise }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Contact Information</h5>
+                    <p class="card-text">
+                        <i class="bi bi-envelope"></i> {{ participant.email }}<br>
+                        {% if participant.phone %}
+                        <i class="bi bi-telephone"></i> {{ participant.phone }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}{{ outcome.title }} - Outcome Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'projects:project-list' %}">Projects</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'projects:project-detail' outcome.project.pk %}">{{ outcome.project.title }}</a></li>
+            <li class="breadcrumb-item active">{{ outcome.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Outcome Details -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="card-title h2">{{ outcome.title }}</h1>
+                        <div>
+                            <a href="{% url 'projects:outcome-update' outcome.pk %}" class="btn btn-outline-primary me-2">Edit</a>
+                            <a href="{% url 'projects:outcome-delete' outcome.pk %}" class="btn btn-outline-danger">Delete</a>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="badge bg-primary">{{ outcome.get_outcome_type_display }}</span>
+                        {% if outcome.commercialization_status %}
+                            <span class="badge bg-success">{{ outcome.get_commercialization_status_display }}</span>
+                        {% endif %}
+                    </div>
+
+                    <h5>Description</h5>
+                    <p>{{ outcome.description }}</p>
+
+                    {% if outcome.quality_certification %}
+                    <h5>Quality Certification</h5>
+                    <p>{{ outcome.quality_certification }}</p>
+                    {% endif %}
+
+                    {% if outcome.artifact_link %}
+                    <h5>Artifact</h5>
+                    <p>
+                        <a href="{{ outcome.artifact_link }}" class="btn btn-outline-primary" target="_blank">
+                            <i class="bi bi-link-45deg"></i> View Artifact
+                        </a>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Project Info Sidebar -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Project Information</h5>
+                    <dl>
+                        <dt>Project</dt>
+                        <dd><a href="{% url 'projects:project-detail' outcome.project.pk %}">{{ outcome.project.title }}</a></dd>
+
+                        <dt>Project Type</dt>
+                        <dd>{{ outcome.project.get_nature_of_project_display }}</dd>
+
+                        <dt>Project Stage</dt>
+                        <dd>{{ outcome.project.get_prototype_stage_display }}</dd>
+
+                        <dt>Created</dt>
+                        <dd>{{ outcome.created_at|date:"F j, Y" }}</dd>
+
+                        <dt>Last Updated</dt>
+                        <dd>{{ outcome.updated_at|date:"F j, Y" }}</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <!-- Program & Facility Info -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Associated Resources</h5>
+                    <dl>
+                        <dt>Program</dt>
+                        <dd><a href="{% url 'program:program-detail' outcome.project.program.pk %}">{{ outcome.project.program.title }}</a></dd>
+
+                        <dt>Facility</dt>
+                        <dd><a href="{% url 'facilities:facility-detail' outcome.project.facility.pk %}">{{ outcome.project.facility.name }}</a></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

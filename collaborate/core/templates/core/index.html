@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Collaborate{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-md-8 mx-auto text-center">
+            <h1 class="display-4 mb-4">Welcome to Collaborate</h1>
+            <p class="lead mb-4">
+                Connect with facilities, access resources, and bring your projects to life. Explore our network of labs, workshops, and testing centers.
+            </p>
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a href="{% url 'facilities:facility-list' %}" class="btn btn-primary btn-lg px-4 gap-3">Explore Facilities</a>
+                <a href="{% url 'program:program-list' %}" class="btn btn-outline-secondary btn-lg px-4">View Programs</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row g-4 py-5">
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title h5">Research Facilities</h3>
+                    <p class="card-text">Access state-of-the-art labs and research facilities equipped with the latest technology.</p>
+                    <a href="{% url 'facilities:facility-list' %}?facility_type=lab" class="btn btn-sm btn-outline-primary">Find Labs</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title h5">Workshops</h3>
+                    <p class="card-text">Utilize professional workshop spaces for prototyping and development of your projects.</p>
+                    <a href="{% url 'facilities:facility-list' %}?facility_type=workshop" class="btn btn-sm btn-outline-primary">Find Workshops</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="card-title h5">Testing Centers</h3>
+                    <p class="card-text">Validate your work with our comprehensive testing and certification facilities.</p>
+                    <a href="{% url 'facilities:facility-list' %}?facility_type=testing" class="btn btn-sm btn-outline-primary">Find Testing Centers</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="row mt-5">
+        <div class="col-md-8 mx-auto text-center">
+            <div class="p-5 bg-light rounded-3">
+                <h2 class="mb-4">Ready to Get Started?</h2>
+                <p class="lead mb-4">Join our community and gain access to world-class facilities and resources.</p>
+                {% if not user.is_authenticated %}
+                    <a href="" class="btn btn-success btn-lg">Register Now</a>
+                {% else %}
+                    <a href="{% url 'facilities:facility-list' %}" class="btn btn-success btn-lg">Browse Facilities</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

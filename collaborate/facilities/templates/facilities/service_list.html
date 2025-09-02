@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Services{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Services</h1>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <form method="get" class="card">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-select">
+                                <option value="">All Categories</option>
+                                <option value="machining" {% if request.GET.category == 'machining' %}selected{% endif %}>Machining</option>
+                                <option value="testing" {% if request.GET.category == 'testing' %}selected{% endif %}>Testing</option>
+                                <option value="training" {% if request.GET.category == 'training' %}selected{% endif %}>Training</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Skill Type</label>
+                            <select name="skill_type" class="form-select">
+                                <option value="">All Types</option>
+                                <option value="hardware" {% if request.GET.skill_type == 'hardware' %}selected{% endif %}>Hardware</option>
+                                <option value="software" {% if request.GET.skill_type == 'software' %}selected{% endif %}>Software</option>
+                                <option value="integration" {% if request.GET.skill_type == 'integration' %}selected{% endif %}>Integration</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Search</label>
+                            <input type="text" name="search" class="form-control" placeholder="Search services..." value="{{ request.GET.search }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="submit" class="btn btn-primary w-100">Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Services List -->
+    <div class="row">
+        {% if services %}
+            {% for service in services %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title">{{ service.name }}</h5>
+                                <span class="badge bg-primary">{{ service.get_category_display }}</span>
+                            </div>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                Facility: <a href="{% url 'facilities:facility-detail' service.facility.pk %}">{{ service.facility.name }}</a>
+                            </h6>
+                            <p class="card-text">{{ service.description|truncatewords:30 }}</p>
+                            
+                            <div class="mt-3">
+                                <span class="badge bg-secondary">{{ service.get_skill_type_display }}</span>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <a href="{% url 'facilities:service-detail' service.pk %}" class="btn btn-outline-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    No services found matching your criteria.
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.skill_type %}&skill_type={{ request.GET.skill_type }}{% endif %}">&laquo; First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.skill_type %}&skill_type={{ request.GET.skill_type }}{% endif %}">Previous</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.skill_type %}&skill_type={{ request.GET.skill_type }}{% endif %}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.skill_type %}&skill_type={{ request.GET.skill_type }}{% endif %}">Last &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
