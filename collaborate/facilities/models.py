@@ -42,8 +42,25 @@ class Equipment(TimeStampedModel):
     capabilities = models.TextField()
     description = models.TextField()
     inventory_code = models.CharField(max_length=100, unique=True)
-    usage_domain = models.CharField(max_length=100, help_text="Electronics, Mechanical, IoT")
-    support_phase = models.CharField(max_length=100, help_text="Training, Prototyping, Testing, Commercialization")
+    usage_domain = models.CharField(
+        max_length=100,
+        choices=[
+            ("electronics", "Electronics"),
+            ("mechanical", "Mechanical"),
+            ("iot", "IoT"),
+            ("robotics", "Robotics"),
+            ("software", "Software"),
+        ]
+    )
+    support_phase = models.CharField(
+        max_length=100,
+        choices=[
+            ("training", "Training"),
+            ("prototyping", "Prototyping"),
+            ("testing", "Testing"),
+            ("commercialization", "Commercialization"),
+        ]
+    )
 
     def __str__(self):
         return f"{self.name} - {self.facility.name}"

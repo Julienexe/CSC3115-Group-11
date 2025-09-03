@@ -36,6 +36,6 @@ class EquipmentForm(forms.ModelForm):
             'capabilities': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'inventory_code': forms.TextInput(attrs={'class': 'form-control'}),
-            'usage_domain': forms.TextInput(attrs={'class': 'form-control'}),
-            'support_phase': forms.TextInput(attrs={'class': 'form-control'}),
+            'usage_domain': forms.Select(attrs={'class': 'form-control'}),
+            'support_phase': forms.Select(attrs={'class': 'form-control'}),
         }
