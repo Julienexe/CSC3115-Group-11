@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}{% if equipment %}Edit{% else %}Create{% endif %} Equipment{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'facilities:facility-list' %}">Facilities</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'facilities:equipment-list' %}">Equipment</a></li>
+            <li class="breadcrumb-item active">{% if equipment %}Edit{% else %}Create{% endif %} Equipment</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">{% if equipment %}Edit{% else %}Create{% endif %} Equipment</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.facility.id_for_label }}" class="form-label">Facility</label>
+                            {{ form.facility }}
+                            {% if form.facility.errors %}
+                                <div class="alert alert-danger">{{ form.facility.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">Name</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="alert alert-danger">{{ form.name.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.capabilities.id_for_label }}" class="form-label">Capabilities</label>
+                            {{ form.capabilities }}
+                            {% if form.capabilities.errors %}
+                                <div class="alert alert-danger">{{ form.capabilities.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="alert alert-danger">{{ form.description.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.inventory_code.id_for_label }}" class="form-label">Inventory Code</label>
+                            {{ form.inventory_code }}
+                            {% if form.inventory_code.errors %}
+                                <div class="alert alert-danger">{{ form.inventory_code.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.usage_domain.id_for_label }}" class="form-label">Usage Domain</label>
+                            {{ form.usage_domain }}
+                            <div class="form-text">Electronics, Mechanical, IoT</div>
+                            {% if form.usage_domain.errors %}
+                                <div class="alert alert-danger">{{ form.usage_domain.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.support_phase.id_for_label }}" class="form-label">Support Phase</label>
+                            {{ form.support_phase }}
+                            <div class="form-text">Training, Prototyping, Testing, Commercialization</div>
+                            {% if form.support_phase.errors %}
+                                <div class="alert alert-danger">{{ form.support_phase.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{% url 'facilities:equipment-list' %}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">
+                                {% if equipment %}Update{% else %}Create{% endif %} Equipment
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
